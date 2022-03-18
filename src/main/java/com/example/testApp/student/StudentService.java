@@ -3,12 +3,13 @@ package com.example.testApp.student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 @Service
 public class StudentService {
 
-//    @Autowired
+    @Autowired
     private final StudentRepository studentRepository;
 
     public StudentService(StudentRepository studentRepository) {
@@ -16,7 +17,7 @@ public class StudentService {
     }
 
     public List<Student> getStudents(){
-        return List.of(new Student());
-//        return studentRepository.findAll();
+//        return List.of(new Student());
+        return studentRepository.findAll();
     }
 }
