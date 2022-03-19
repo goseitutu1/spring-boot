@@ -10,7 +10,15 @@ import java.time.LocalDateTime;
 //@Table
 public class Student {
     @javax.persistence.Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @SequenceGenerator(
+            name = "student_sequence",
+            sequenceName = "student_sequence",
+            allocationSize = 1
+    )
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "student_sequence"
+    )
     @Column(name = "id", nullable = false)
     private Long id;
 
@@ -68,5 +76,10 @@ public class Student {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    @Override
+    public String toString(){
+        return "{name: "+ this.name + ", age: "+ this.age + ", email: " + this.email + ", dob: " + this.dob + "}";
     }
 }
