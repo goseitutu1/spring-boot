@@ -4,7 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -47,14 +50,42 @@ public class StudentService {
             throw new IllegalStateException("Student with ID " + studentID + " does not exits");
     }
 
-    public Optional<String> getStudentEmail(Long studentID) {
+    public String getStudentEmail(Long studentID) {
 
-        boolean studentExits = studentRepository.existsById(studentID);
-        if (studentExits){
-            return studentRepository.getStudentEmail(studentID);
+        Student student = studentRepository.findById(studentID).orElseThrow(() ->
+                new IllegalStateException("Student with ID " + studentID + " does not exits")
+                );
+
+        return student.getEmail();
+
+//        boolean studentExits = studentRepository.existsById(studentID);
+//        if (studentExits){
+//            return studentRepository.getStudentEmail(studentID);
+//        }
+//        else
+//            throw new IllegalStateException("Student with ID " + studentID + " does not exits");
+    }
+
+    public void getDates(String startDate, String endDate) {
+        System.out.println(startDate +  " " + endDate);
+    }
+
+    @Transactional
+    public void updateStudent(Long studentID, String name, String email) {
+        Student student = studentRepository.findById(studentID).orElseThrow(() -> new IllegalStateException("Student " +
+                "with ID: "+ studentID + " does not exits"));
+        if (name != null && name.length() > 0 && !Objects.equals(student.getName(),name))
+            student.setName(name);
+
+        if (email != null && email.length() > 0 && !Objects.equals(student.getEmail(),email)){
+            Optional<Student> foundStudentEmail = studentRepository.studentEmailChecker(email);
+            if (foundStudentEmail.isPresent()){
+                throw new IllegalStateException("student email \""+ email +"\"  already exits");
+            }
+            else {
+                student.setEmail(email);
+            }
         }
-        else
-            throw new IllegalStateException("Student with ID " + studentID + " does not exits");
     }
 }
 

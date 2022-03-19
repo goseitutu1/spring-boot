@@ -3,6 +3,7 @@ package com.example.testApp.student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,7 +19,7 @@ public class StudentController {
     }
 
     @GetMapping(path = "/email/{studentID}")
-    public Optional<String> getStudentEmail(@PathVariable("studentID") Long studentID){
+    public String getStudentEmail(@PathVariable("studentID") Long studentID){
         return studentService.getStudentEmail(studentID);
     }
 
@@ -40,5 +41,19 @@ public class StudentController {
     @DeleteMapping(path = "{studentID}")
     public void deleteStudent(@PathVariable("studentID") Long studentID){
         studentService.deleteStudent(studentID);
+    }
+
+    @PostMapping(path = "date/{startDate}/{endDate}")
+    public void getDates(@PathVariable("startDate") String startDate, @PathVariable("endDate") String endDate){
+        studentService.getDates(startDate,endDate);
+    }
+
+    @PutMapping(path = "{studentID}")
+    public void updateStudent(
+            @PathVariable("studentID") Long studentID,
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String email
+    ){
+        studentService.updateStudent(studentID,name,email);
     }
 }
