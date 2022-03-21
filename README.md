@@ -1,2 +1,2 @@
 # spring-boot
-spring boot tutorials
+spring boot application
